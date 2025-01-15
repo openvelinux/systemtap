@@ -1,0 +1,39 @@
+--- a/stap-prep
++++ b/stap-prep
+@@ -111,6 +111,9 @@
+ export DEBIAN_FRONTEND
+ 
+ case "$DISTRO" in 
++    Velinux)
++	VERSION="$(uname -v | cut -d " " -f 4)"
++	;;
+     Debian) # 2.6.32-39
+ 	if uname -v | grep -q Debian; then
+ 	    VERSION="$(uname -v | cut -d " " -f 4)"
+@@ -133,7 +136,7 @@
+     echo "linux-image-$ABINAME = $VERSION"
+     echo "linux-headers-$ABINAME = $VERSION"
+     if [ "$DEBUGINFOD" -eq 0 ]; then # add dbgsym search if not already 
+-        if [ "$DISTRO" = "Debian" ]; then
++        if [ "$DISTRO" = "Debian" ] || [ "$DISTRO" = "Velinux" ]; then
+ 	        echo "linux-image-$ABINAME-dbg = $VERSION"
+         else
+             echo "linux-image-$ABINAME-dbgsym = $VERSION"
+@@ -148,7 +151,7 @@
+ 	    if [ "$DISTRO" = "Ubuntu"  ]; then
+ 		echo " Ubuntu -dbgsym packages are typically in a separate repository"
+ 		echo " Follow https://wiki.ubuntu.com/DebuggingProgramCrash to add this repository"
+-	    elif [ "$DISTRO" = "Debian" ]; then
++	    elif [ "$DISTRO" = "Debian" ] || [ "$DISTRO" = "Velinux" ]; then
+ 		echo " Debian -dbgsym packages are typically in a separate repository"
+ 		echo " Follow https://wiki.debian.org/AutomaticDebugPackages to add this repository"
+ 	    fi
+@@ -179,7 +182,7 @@
+ prep_debuginfod "$@"
+ DISTRO="$(lsb_release --id --short 2> /dev/null)"
+ case "$DISTRO" in
+-Debian|Ubuntu)
++Velinux|Debian|Ubuntu)
+ 	prep_deb_based "$@"
+ 	;;
+ *)

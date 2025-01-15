@@ -1,0 +1,7 @@
+debversion.diff
+suggest-readme.debian.diff
+dtrace-no-std-include-path.diff
+stap-prep.patch
+systemtap-ia64.patch
+dtrace-deterministic-tmpfile.diff
+velinux-os-release-adaption.diff
